@@ -4,9 +4,6 @@
 push() ->
 	Address = "localhost",
 	Port = 5555,
-	Cert = "/path/to/certificate.pem",
-	Key = "/path/to/key.pem",
-	Password = "password",  
 
 	Options = [{mode, binary}, {packet, 0}, {active, false}],
   	Timeout = 1000,
