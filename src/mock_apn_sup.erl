@@ -22,7 +22,7 @@
 -define(KEY, "/path/to/key.pem").
 -define(PASSWORD, "password").
 
--define(MOCK_APN_PORT, 5555).
+-define(MOCK_APN_PORT, 2195).
 
 -define(SSLOPTIONS, [{certfile, ?CERTIFICATE},
                      {keyfile,  ?KEY},

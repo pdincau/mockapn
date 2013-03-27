@@ -3,7 +3,7 @@
 
 push() ->
 	Address = "localhost",
-	Port = 5555,
+	Port = 2195,
 
 	Options = [{mode, binary}, {packet, 0}, {active, false}],
   	Timeout = 1000,
