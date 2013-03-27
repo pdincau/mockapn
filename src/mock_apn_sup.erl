@@ -18,8 +18,8 @@
 
 -define(SERVER, ?MODULE).
 
--define(CERTIFICATE, "/home/paolo/apnstub/certs/certificate.pem").
--define(KEY, "/home/paolo/apnstub/certs/key.pem").
+-define(CERTIFICATE, "/path/to/certificate.pem").
+-define(KEY, "/path/to/key.pem").
 -define(PASSWORD, "password").
 
 -define(MOCK_APN_PORT, 5555).
