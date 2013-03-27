@@ -9,9 +9,9 @@ The first thing you have to do is set the proper values in `src/mock_apn_sup.erl
 
 How to compile:
 
-$ make
+    $ make
 
 How to run:
 
-$ make start
+    $ make start
 
