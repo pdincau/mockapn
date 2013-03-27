@@ -92,10 +92,11 @@ handle_cast(accept, #state{socket = LSocket} = State) ->
     TRef = erlang:send_after(?MAX_STANDBY, self(), disconnect),
     {noreply, State#state{socket = NewSocket, tref = TRef}};
 
-handle_cast(parse, #state{socket = Socket, buffer = Buffer} = State) ->
+handle_cast(parse, #state{socket = _Socket, buffer = Buffer} = State) ->
     case Buffer of
         <<0:8, _BinTokenLength:16/big, _BinDeviceToken:256, PayloadLength:16/big, _BinPayload:PayloadLength/binary-unit:8, Rest/binary>> ->
-	    io:format("~p~n", [_BinDeviceToken]),
+	    DeviceToken = integer_to_list(_BinDeviceToken, 16),
+	    io:format("~p~n", [DeviceToken]),
             {noreply, State#state{buffer = Rest}};
         <<1:8, _Id:32/big, _Expiry:32/big, _BinTokenLength:16/big, _BinDeviceToken:256, PayloadLength:16/big, _BinPayload:PayloadLength/binary-unit:8, Rest/binary>> ->
 	    DeviceToken = integer_to_list(_BinDeviceToken, 16),
