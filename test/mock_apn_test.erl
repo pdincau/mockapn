@@ -4,8 +4,8 @@
 push() ->
 	Address = "localhost",
 	Port = 5555,
-	Cert = "../certs/certificate.pem",
-	Key = "../certs/key.pem",
+	Cert = "/path/to/certificate.pem",
+	Key = "/path/to/key.pem",
 	Password = "password",  
 
 	Options = [{mode, binary}, {packet, 0}, {active, false}],
@@ -14,7 +14,7 @@ push() ->
   	ssl:start(),
   	{ok, Socket} = ssl:connect(Address, Port, Options, Timeout),
 
-  	BinPayload = <<"{\"aps\":{\"alert\":\"Just testing 1!!\"}}">>,
+  	BinPayload = <<"{\"aps\":{\"alert\":\"Just testing !!\"}}">>,
   	PayloadLength = erlang:byte_size(BinPayload),
   
   	DeviceToken = "your_device_token_as_string",
