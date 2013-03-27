@@ -1,0 +1,12 @@
+{application, mock_apn,
+ [
+  {description, ""},
+  {vsn, "1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, { mock_apn_app, []}},
+  {env, []}
+ ]}.
