@@ -11,7 +11,9 @@ Currently `mockapn` only receives push notifications printing:
 1. the token and the JSON for a successful push
 2. the token for an not successful push
 
-If a token is invalid (most common error in my experience with APN) an error message is sent to client and the connection is closed. 
+Only for packets built using the `enhanced format` if the token is invalid (most common error in my experience with APN) an error message is sent to client and the connection is closed.
+
+Nothing but printing is done for packets built using `simple format`.  
 
 No other functionality is implemented for now.
 
