@@ -20,6 +20,8 @@
 -define(SERVER, ?MODULE). 
 -define(MAX_STANDBY, 120 * 60 * 1000).
 
+-define(INVALID_TOKENS, ["7518B1C2C7686D3B5DCAC8232313D5D0047CF0DC0ED5D753C017FFB64AD25B61"]).
+
 -record(state, {buffer = <<>>, socket, tref}).
 
 %%%===================================================================
@@ -92,16 +94,27 @@ handle_cast(accept, #state{socket = LSocket} = State) ->
     TRef = erlang:send_after(?MAX_STANDBY, self(), disconnect),
     {noreply, State#state{socket = NewSocket, tref = TRef}};
 
-handle_cast(parse, #state{socket = _Socket, buffer = Buffer} = State) ->
+handle_cast(parse, #state{socket = Socket, buffer = Buffer} = State) ->
     case Buffer of
-        <<0:8, _BinTokenLength:16/big, _BinDeviceToken:256, PayloadLength:16/big, _BinPayload:PayloadLength/binary-unit:8, Rest/binary>> ->
+        <<0:8, _BinTokenLength:16/big, _BinDeviceToken:256, PayloadLength:16/big, BinPayload:PayloadLength/binary-unit:8, Rest/binary>> ->
 	    DeviceToken = integer_to_list(_BinDeviceToken, 16),
 	    io:format("~p~n", [DeviceToken]),
-            {noreply, State#state{buffer = Rest}};
-        <<1:8, _Id:32/big, _Expiry:32/big, _BinTokenLength:16/big, _BinDeviceToken:256, PayloadLength:16/big, _BinPayload:PayloadLength/binary-unit:8, Rest/binary>> ->
+            io:format("~p~n", [BinPayload]),
+	    {noreply, State#state{buffer = Rest}};
+        <<1:8, Id:32/big, _Expiry:32/big, _BinTokenLength:16/big, _BinDeviceToken:256, PayloadLength:16/big, BinPayload:PayloadLength/binary-unit:8, Rest/binary>> ->
 	    DeviceToken = integer_to_list(_BinDeviceToken, 16),
-	    io:format("~p~n", [DeviceToken]),
-            {noreply, State#state{buffer = Rest}};
+	    case is_invalid(DeviceToken) of
+		true ->
+		    Error = <<8:8, 8:8, Id:32/big>>,
+	            ssl:send(Socket, Error),
+		    ssl:close(Socket),
+		    io:format("Device Token: ~p is invalid.~n", [DeviceToken]),
+		    {stop, normal, State};
+		false ->
+		    io:format("Device Token: ~p~n", [DeviceToken]),
+                    io:format("~p~n", [BinPayload]),
+		    {noreply, State#state{buffer = Rest}}
+	    end;
         _ ->
             {noreply, State#state{buffer = Buffer}}
     end;
@@ -166,3 +179,5 @@ code_change(_OldVsn, State, _Extra) ->
 %%%===================================================================
 %%% Internal functions
 %%%===================================================================
+is_invalid(DeviceToken) ->
+     lists:member(DeviceToken, ?INVALID_TOKENS).
