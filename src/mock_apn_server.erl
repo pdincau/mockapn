@@ -20,7 +20,7 @@
 -define(SERVER, ?MODULE). 
 -define(MAX_STANDBY, 120 * 60 * 1000).
 
--define(INVALID_TOKENS, ["7518B1C2C7686D3B5DCAC8232313D5D0047CF0DC0ED5D753C017FFB64AD25B61"]).
+-define(INVALID_TOKENS, ["invalidtokenhere"]).
 
 -record(state, {buffer = <<>>, socket, tref}).
 
