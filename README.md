@@ -1,7 +1,7 @@
 mockapn
 =======
 
-This software simulates an `APN server`. 
+This software simulates an An [`APN server`](http://developer.apple.com/library/mac/#documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CommunicatingWIthAPS/CommunicatingWIthAPS.html "Developer Guide APN"). 
 
 
 ### What mockapn does:
