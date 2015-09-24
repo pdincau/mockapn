@@ -26,7 +26,7 @@
 
 -define(SSLOPTIONS, [{certfile, ?CERTIFICATE},
                      {keyfile,  ?KEY},
-		     {password, ?PASSWORD},
+                     {password, ?PASSWORD},
                      {mode, binary},
                      {packet, 0},
                      {backlog, 1000},
@@ -65,9 +65,9 @@ start_link() ->
 %%--------------------------------------------------------------------
 init([]) ->
     ssl:start(),
-    
-    
-    {ok, LSocket} = ssl:listen(?MOCK_APN_PORT, ?SSLOPTIONS),
+    SSLOptions = lists:map(fun get_config_value/1, ?SSLOPTIONS),
+
+    {ok, LSocket} = ssl:listen(?MOCK_APN_PORT, SSLOptions),
 
     spawn_link(fun empty_listeners/0),
 
@@ -95,3 +95,9 @@ start_socket() ->
 empty_listeners() ->
     [start_socket() || _ <- lists:seq(1, 2000)],
     ok.
+
+get_config_value({Key, CurrentValue}) ->
+    case application:get_env(mock_apn, Key) of
+        {ok, NewValue} -> {Key, NewValue};
+        undefined -> {Key, CurrentValue}
+    end.

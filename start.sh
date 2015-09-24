@@ -1,3 +1,3 @@
 #!/bin/sh
-erl -sname mock_apn -pa ebin/ -eval "application:start(mock_apn)."
+erl -sname mock_apn -pa ebin/ -config mockapn -eval "application:start(mock_apn)."
 
